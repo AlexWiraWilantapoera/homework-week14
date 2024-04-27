@@ -1,23 +1,37 @@
 "use client";
-import { login } from "@/fetching/auth";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
-export default function Login() {
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createUser } from "@/fetching/users";
+import Link from "next/link";
+
+export default function CreateUser() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
   async function handleSubmit() {
-    await login({ email, password });
-    router.push("/");
+    await createUser({
+      name,
+      email,
+      password,
+    });
+    router.push("/login");
   }
+
   return (
-    <div>
+    <>
       <div>
-        <h1 style={{ margin: "5px" }}>Login</h1>
+        <h1 style={{ display: "block", margin: "5px" }}>Register</h1>
       </div>
       <div>
+        <input
+          style={{ display: "block", margin: "5px", paddingRight: "10px" }}
+          type="text"
+          placeholder="Enter your name"
+          onChange={(e) => setName(e.target.value)}
+        />
         <input
           style={{ display: "block", margin: "5px", paddingRight: "10px" }}
           type="email"
@@ -30,13 +44,11 @@ export default function Login() {
           placeholder="Enter your password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button style={{ margin: "5px" }} type="button" onClick={handleSubmit}>
-          LOGIN
-        </button>
-        <Link href={"/register"}>
-          <button style={{ margin: "5px" }}>REGISTER</button>
+        <button onClick={handleSubmit}>REGISTER</button>{" "}
+        <Link href={"/login"}>
+          <button>CANCEL</button>
         </Link>
       </div>
-    </div>
+    </>
   );
 }
